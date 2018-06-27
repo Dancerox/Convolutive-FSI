@@ -110,13 +110,14 @@ with tf.Session() as sess:
 
     error_train = []
     error_valid = []
-    errorStop = 0.001
+    errorStop = 0.01
     previousError = 9999
     currentError = 9999
 
-
-    for _ in range(10000):
+    _=0
+    while True:
         sess.run(optimizer)
+        _ += 1
         if _ % 20 == 0:
             print("Epoch:", _, "---------------------------------------------")
             error_train.append(sess.run(cost))
@@ -125,7 +126,7 @@ with tf.Session() as sess:
             print("Validation Error:", sess.run(cost_valid))
             previousError = currentError
             currentError = sess.run(cost_valid)
-            print currentError
+            print "Error: ", currentError
             if currentError <= errorStop:
                 break
 
@@ -151,8 +152,8 @@ with tf.Session() as sess:
 
     plot.legend(handles=[tr_handle, vl_handle], labels=["Training Error", "Validation Error"])
     plot.title("Learning rate = 0.01")
+    plot.savefig("myplot.png")
     plot.show()
-    plot.savefig("Training_graphic.png")
 
 
     coord.request_stop()
